@@ -9,7 +9,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/kakao" element={<CalendarPage />} />
+        <Route path="/oauth" element={<CalendarPage />} />
       </Routes>
     </BrowserRouter>
   );

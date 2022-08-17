@@ -1,7 +1,12 @@
 import React from "react";
+import Calendar from "../components/Calendar";
 
 const CalendarPage = () => {
-  return <div>캘린더 페이지입니다.</div>;
+  return (
+    <div>
+      <Calendar />
+    </div>
+  );
 };
 
 export default CalendarPage;

@@ -6,12 +6,16 @@ type Props = {
   setOnModal: (state: boolean) => void;
 };
 
-const ModalFrame: React.FC<Props> = ({ children, setOnModal }: Props) => {
+const ModalFrame = ({ children, setOnModal }: Props) => {
   return (
     <ModalPortal>
-      <div onClick={() => setOnModal(false)}>
+      <div
+        onClick={() => setOnModal(false)}
+        style={{ width: "100%", height: "100%", background: "#ddd" }}
+      >
         <div>
-          {children}
+          <input></input>
+          <div></div>
           <button className="close" onClick={() => setOnModal(false)}>
             닫기
           </button>

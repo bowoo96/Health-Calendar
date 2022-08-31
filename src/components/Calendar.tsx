@@ -5,10 +5,14 @@ import ko from "date-fns/locale/ko";
 import "../css/react-datepicker.css";
 
 const Calendar = () => {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<Props["startDate"]>(new Date());
   const [onModal, setOnModal] = useState(false);
 
   registerLocale("ko", ko);
+
+  type Props = {
+    startDate: Date;
+  };
 
   return (
     <div>
@@ -20,7 +24,9 @@ const Calendar = () => {
         monthsShown={1}
         inline
       />
-      {onModal && <Modal setOnModal={(boolean) => setOnModal(boolean)} />}
+      {onModal && (
+        <Modal setOnModal={(boolean) => setOnModal(boolean)} {...startDate} />
+      )}
     </div>
   );
 };

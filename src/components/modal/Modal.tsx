@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ModalPortal from "./ModalPortal";
 
@@ -6,22 +6,39 @@ type Props = {
   setOnModal: (state: boolean) => void;
 };
 
+type Target = {
+  target: string;
+};
+
 const Modal = ({ setOnModal }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSelect, setIsSelect] = useState("유산소");
+
+  const dropdownHandler = (res: any) => {
+    setIsOpen(false);
+    setIsSelect(res.target.innerHTML);
+    console.log(res);
+  };
+
   return (
     <ModalPortal>
       <ModalBackground>
         <ModalFrame>
           <ModalTitleInput placeholder="제목을 입력해 주세요." />
-          <div>2022.08.20</div>
-          <div>
-            <p>유산소</p>
-            <ul>
-              <li>유산소</li>
-              <li>무산소</li>
-              <li>유,무산소</li>
-            </ul>
-          </div>
-          <p>기록</p>
+          <ModalDate>2022.08.20</ModalDate>
+          <Dropdown>
+            <DropdownSelect onClick={() => setIsOpen(true)}>
+              {isSelect}
+            </DropdownSelect>
+            {isOpen && (
+              <DropdownFrame onClick={dropdownHandler}>
+                <DropdownItem>유산소</DropdownItem>
+                <DropdownItem>무산소</DropdownItem>
+                <DropdownItem>유,무산소</DropdownItem>
+              </DropdownFrame>
+            )}
+          </Dropdown>
+          <RecordTitle>기록</RecordTitle>
           <ul>
             <li>
               <ModalTitleInput placeholder="운동" width="180px" />
@@ -29,10 +46,10 @@ const Modal = ({ setOnModal }: Props) => {
               <ModalTitleInput placeholder="횟수" width="180px" />
             </li>
           </ul>
-          <div>
-            <button onClick={() => setOnModal(false)}>저장</button>
-            <button onClick={() => setOnModal(false)}>닫기</button>
-          </div>
+          <ButtonWrapper>
+            <Button onClick={() => setOnModal(false)}>저장</Button>
+            <Button onClick={() => setOnModal(false)}>닫기</Button>
+          </ButtonWrapper>
         </ModalFrame>
       </ModalBackground>
     </ModalPortal>
@@ -50,21 +67,72 @@ const ModalBackground = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  text-align: center;
   background-color: #00000033;
 `;
 
 const ModalFrame = styled.div`
-  width: 700px;
+  width: 600px;
   height: 700px;
   background-color: #fff;
+  padding: 50px;
 `;
 
 const ModalTitleInput = styled.input`
   width: ${(props) => props.width || "600px"};
   height: 40px;
-  margin-top: 50px;
   text-indent: 10px;
+  box-sizing: border-box;
+  &:not(:first-child) {
+    margin-left: 20px;
+  }
+`;
+
+const ModalDate = styled.div`
+  margin-top: 20px;
+`;
+
+const Dropdown = styled.div`
+  margin-top: 20px;
+  position: relative;
+  text-indent: 10px;
+`;
+
+const DropdownSelect = styled.p`
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  background-color: #fff;
+`;
+
+const DropdownFrame = styled.ul`
+  position: absolute;
+  background-color: #fff;
+`;
+
+const DropdownItem = styled.li`
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  margin-top: -1px;
+`;
+
+const RecordTitle = styled.p`
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px 0 10px 0;
+`;
+
+const ButtonWrapper = styled.div`
+  margin-top: 20px;
+`;
+
+const Button = styled.button`
+  width: 100px;
+  height: 30px;
   &:not(:first-child) {
     margin-left: 20px;
   }

@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ModalPortal from "./ModalPortal";
+import RecordItem from "../RecordItem";
+import { ModalTitleInput, RecordButton } from "../common/commonStyle";
 
 const Modal: React.FC<{
   setOnModal: (prev: boolean) => void;
@@ -8,13 +10,51 @@ const Modal: React.FC<{
 }> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelect, setIsSelect] = useState("유산소");
+  const [recordArray, setRecordArray] = useState([]);
+  const [isDisable, setIsDisable] = useState(true);
+  const [recordData, setRecordData] = useState({
+    exerciseType: "",
+    set: "",
+    count: "",
+  });
 
   const dropdownHandler = (res: React.MouseEvent) => {
-    setIsOpen(false);
     const responseTarget = res.target as HTMLElement;
+    setIsOpen(false);
     setIsSelect(responseTarget.innerText);
   };
 
+  // 운동기록 입력 시 객체에 저장하는 로직 3개
+  const exerciseTypeHandler = (data: React.ChangeEvent<HTMLInputElement>) => {
+    setRecordData((prev) => {
+      return { ...prev, exerciseType: data.target.value };
+    });
+  };
+
+  const setHandler = (data: React.ChangeEvent<HTMLInputElement>) => {
+    setRecordData((prev) => {
+      return { ...prev, set: data.target.value };
+    });
+  };
+
+  const countHandler = (data: React.ChangeEvent<HTMLInputElement>) => {
+    setRecordData((prev) => {
+      return { ...prev, count: data.target.value };
+    });
+  };
+
+  // 운동 기록 입력 시 +버튼 disabled 풀기
+  useEffect(() => {
+    if (
+      recordData.exerciseType.length > 0 &&
+      recordData.count.length > 0 &&
+      recordData.set.length > 0
+    ) {
+      setIsDisable(false);
+    } else return;
+  }, [recordData]);
+
+  console.log(recordData);
   return (
     <ModalPortal>
       <ModalBackground>
@@ -33,13 +73,27 @@ const Modal: React.FC<{
               </DropdownFrame>
             )}
           </Dropdown>
-          <RecordTitle>기록</RecordTitle>
+          <RecordTitle>기록 입력(+버튼을 클릭해야 추가됩니다.)</RecordTitle>
+          <RecordInputWrap>
+            <ModalTitleInput
+              placeholder="운동"
+              width="170px"
+              onChange={exerciseTypeHandler}
+            />
+            <ModalTitleInput
+              placeholder="세트"
+              width="170px"
+              onChange={setHandler}
+            />
+            <ModalTitleInput
+              placeholder="횟수"
+              width="170px"
+              onChange={countHandler}
+            />
+            <RecordButton disabled={isDisable}>+</RecordButton>
+          </RecordInputWrap>
           <ul>
-            <li>
-              <ModalTitleInput placeholder="운동" width="180px" />
-              <ModalTitleInput placeholder="세트" width="180px" />
-              <ModalTitleInput placeholder="횟수" width="180px" />
-            </li>
+            <li></li>
           </ul>
           <ButtonWrapper>
             <Button onClick={() => props.setOnModal(false)}>저장</Button>
@@ -70,16 +124,6 @@ const ModalFrame = styled.div`
   height: 700px;
   background-color: #fff;
   padding: 50px;
-`;
-
-const ModalTitleInput = styled.input`
-  width: ${(props) => props.width || "600px"};
-  height: 40px;
-  text-indent: 10px;
-  box-sizing: border-box;
-  &:not(:first-child) {
-    margin-left: 20px;
-  }
 `;
 
 const ModalDate = styled.div`
@@ -131,4 +175,10 @@ const Button = styled.button`
   &:not(:first-child) {
     margin-left: 20px;
   }
+`;
+
+const RecordInputWrap = styled.div`
+  width: 600px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
 `;

@@ -2,7 +2,6 @@ import * as React from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import CalendarPage from "./pages/CalendarPage";
 

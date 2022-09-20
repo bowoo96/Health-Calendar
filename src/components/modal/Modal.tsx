@@ -2,22 +2,17 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ModalPortal from "./ModalPortal";
 
-type Props = {
-  setOnModal: (state: boolean) => void;
-};
-
-type Target = {
-  target: string;
-};
-
-const Modal = ({ setOnModal }: Props) => {
+const Modal: React.FC<{
+  setOnModal: (prev: boolean) => void;
+  startData: Date;
+}> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelect, setIsSelect] = useState("유산소");
 
-  const dropdownHandler = (res: any) => {
+  const dropdownHandler = (res: React.MouseEvent) => {
     setIsOpen(false);
-    setIsSelect(res.target.innerHTML);
-    console.log(res);
+    const responseTarget = res.target as HTMLElement;
+    setIsSelect(responseTarget.innerText);
   };
 
   return (
@@ -25,7 +20,7 @@ const Modal = ({ setOnModal }: Props) => {
       <ModalBackground>
         <ModalFrame>
           <ModalTitleInput placeholder="제목을 입력해 주세요." />
-          <ModalDate>2022.08.20</ModalDate>
+          <ModalDate>{props.startData.toString()}</ModalDate>
           <Dropdown>
             <DropdownSelect onClick={() => setIsOpen(true)}>
               {isSelect}
@@ -47,8 +42,8 @@ const Modal = ({ setOnModal }: Props) => {
             </li>
           </ul>
           <ButtonWrapper>
-            <Button onClick={() => setOnModal(false)}>저장</Button>
-            <Button onClick={() => setOnModal(false)}>닫기</Button>
+            <Button onClick={() => props.setOnModal(false)}>저장</Button>
+            <Button onClick={() => props.setOnModal(false)}>닫기</Button>
           </ButtonWrapper>
         </ModalFrame>
       </ModalBackground>

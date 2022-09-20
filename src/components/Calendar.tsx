@@ -8,6 +8,7 @@ const Calendar = () => {
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [onModal, setOnModal] = useState(false);
 
+  // DatePicker 한글화 설정
   registerLocale("ko", ko);
 
   return (

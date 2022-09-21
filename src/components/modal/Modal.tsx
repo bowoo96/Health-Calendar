@@ -4,15 +4,23 @@ import ModalPortal from "./ModalPortal";
 import RecordItem from "../RecordItem";
 import { ModalTitleInput, RecordButton } from "../common/commonStyle";
 
+export interface Recorditem {
+  id: string;
+  exerciseType: string;
+  set: string;
+  count: string;
+}
+
 const Modal: React.FC<{
   setOnModal: (prev: boolean) => void;
   startData: Date;
 }> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelect, setIsSelect] = useState("유산소");
-  const [recordArray, setRecordArray] = useState([]);
+  const [recordArray, setRecordArray] = useState<Recorditem[]>([]);
   const [isDisable, setIsDisable] = useState(true);
   const [recordData, setRecordData] = useState({
+    id: new Date().getTime().toString(),
     exerciseType: "",
     set: "",
     count: "",
@@ -54,7 +62,12 @@ const Modal: React.FC<{
     } else return;
   }, [recordData]);
 
-  console.log(recordData);
+  const AddRecordHandler = () => {
+    setRecordArray((prev) => prev.concat(recordData));
+    setRecordData({ id: "", exerciseType: "", set: "", count: "" });
+  };
+
+  console.log(recordData, recordArray);
   return (
     <ModalPortal>
       <ModalBackground>
@@ -79,21 +92,28 @@ const Modal: React.FC<{
               placeholder="운동"
               width="170px"
               onChange={exerciseTypeHandler}
+              value={recordData.exerciseType}
             />
             <ModalTitleInput
               placeholder="세트"
               width="170px"
               onChange={setHandler}
+              value={recordData.set}
             />
             <ModalTitleInput
               placeholder="횟수"
               width="170px"
               onChange={countHandler}
+              value={recordData.count}
             />
-            <RecordButton disabled={isDisable}>+</RecordButton>
+            <RecordButton disabled={isDisable} onClick={AddRecordHandler}>
+              +
+            </RecordButton>
           </RecordInputWrap>
           <ul>
-            <li></li>
+            {recordArray.map((item) => (
+              <RecordItem key={item.id} recordData={item} />
+            ))}
           </ul>
           <ButtonWrapper>
             <Button onClick={() => props.setOnModal(false)}>저장</Button>

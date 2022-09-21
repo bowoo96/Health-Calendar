@@ -15,9 +15,11 @@ export const ModalTitleDiv = styled.div`
   height: 40px;
   text-indent: 10px;
   box-sizing: border-box;
+  line-height: 40px;
   &:not(:first-child) {
     margin-left: 20px;
   }
+  border: 1px solid #ddd;
 `;
 
 export const RecordButton = styled.button`
